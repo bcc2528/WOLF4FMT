@@ -1,0 +1,33 @@
+g:\wolf4fmt\src\FIXEDMUL.OBJ
+g:\wolf4fmt\src\GAMEPAL3.OBJ
+g:\wolf4fmt\src\ID_CA.OBJ
+g:\wolf4fmt\src\ID_IN.OBJ
+g:\wolf4fmt\src\ID_PM.OBJ
+g:\wolf4fmt\src\ID_SD.OBJ
+g:\wolf4fmt\src\ID_US_1.OBJ
+g:\wolf4fmt\src\ID_VH.OBJ
+g:\wolf4fmt\src\ID_VL.OBJ
+g:\wolf4fmt\src\WL_ACT1.OBJ
+g:\wolf4fmt\src\WL_ACT2.OBJ
+g:\wolf4fmt\src\WL_AGENT.OBJ
+g:\wolf4fmt\src\WL_DEBUG.OBJ
+g:\wolf4fmt\src\WL_DRAW.OBJ
+g:\wolf4fmt\src\WL_GAME.OBJ
+g:\wolf4fmt\src\WL_INTER.OBJ
+g:\wolf4fmt\src\WL_MAIN.OBJ
+g:\wolf4fmt\src\WL_MENU.OBJ
+g:\wolf4fmt\src\WL_PLAY.OBJ
+g:\wolf4fmt\src\WL_STATE.OBJ
+g:\wolf4fmt\src\WL_TEXT.OBJ
+
+-lib d:\hc386\small\snd
+-lib d:\hc386\small\tbios
+-lib d:\hc386\small\hce
+-lib d:\hc386\small\his
+-lib d:\hc386\small\na
+-twocase
+-stack 16384
+-80386
+-exe wolf4fmt.exp
+
+
