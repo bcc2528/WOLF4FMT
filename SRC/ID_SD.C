@@ -715,7 +715,7 @@ static void SDL_PCMPlay_Gun(soundnames sound)
 	//Need wait(384 source clocks) for RF5C68 registers? i don't know.
 	_outb(0x4f7, 0x8f);
 	*waveram++ = 0x0;
-	for(int i = 0;i < 383;i++)
+	for(int i = 0;i < 63;i++)
 	{
 		*waveram++ = 0xff;
 	}
