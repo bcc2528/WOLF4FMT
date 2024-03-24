@@ -153,7 +153,6 @@ void INL_KeyService(void)
 	{
 		/* １バイト目のキーデータ */
 		preCode = k;
-		_enable();
 		return;
 	}
 

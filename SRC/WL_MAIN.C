@@ -94,9 +94,15 @@ void ReadConfig(void)
 		SDMode  sd;
 		SMMode  sm;
 		SDSMode sds;
+		char filename[20] = "";
 
+		if(MS_CheckParm("fdd"))
+		{
+			strcpy(filename,"a:\\");
+		}
+		strcat(filename,configname);
 
-		if ( (file = open(configname,O_BINARY | O_RDONLY)) != -1)
+		if ( (file = open(filename,O_BINARY | O_RDONLY)) != -1)
 		{
 		//
 		// valid config file
@@ -209,6 +215,7 @@ noconfig:
 		SD_SetMusicMode (sm);
 		SD_SetSoundMode (sd);
 		SD_SetDigiDevice (sds);
+
 }
 
 
@@ -223,8 +230,15 @@ noconfig:
 void WriteConfig(void)
 {
 		int file;
+		char filename[20] = "";
 
-		file = open(configname,O_CREAT | O_BINARY | O_WRONLY,
+		if(MS_CheckParm("fdd"))
+		{
+			strcpy(filename,"a:\\");
+		}
+		strcat(filename,configname);
+
+		file = open(filename,O_CREAT | O_BINARY | O_WRONLY,
 								S_IREAD | S_IWRITE | S_IFREG);
 
 		if (file != -1)
@@ -1141,6 +1155,7 @@ void InitGame (void)
 		VL_SetPalette (gamepal);
 
 		VL_WriteCRTC( 17, 62976);
+		VL_WriteCRTC( 21, 62976);
 
 		WindowX = 160-14*8;
 		WindowY = 80-3*8;

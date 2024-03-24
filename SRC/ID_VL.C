@@ -120,13 +120,11 @@ unsigned short VL_ReadCRTC(int address)
 
 void VL_WaitVBL(int vbls)
 {
-	char para[16];
-	DWORD(para) = 0;
-
-	while(vbls > 0)
+	while(vbls--)
 	{
-		EGB_palette (work, 1, para);
-		vbls--;
+		//Wait Vsync
+		_outb( 0x0440, 30 );
+		while(!(_inb(0x443) & 4)){}
 	}
 }
 
@@ -339,15 +337,8 @@ void VL_Plot (int x, int y, int color)
 
 void VL_Hlin (unsigned x, unsigned y, unsigned width, int color)
 {
-	_Far byte *vram;
-	_FP_SEG(vram) = 0x10c;
-
-	_FP_OFF(vram) = (x + vbuf) + (y << 10); // << 10 = * VRAMWIDTH
-
-	while(width--)
-	{
-		*vram++ = (byte)color;
-	}
+	// << 10 = * VRAMWIDTH
+	setdata_b(0x10c,(x + vbuf) + (y << 10),color,width);
 }
 
 
@@ -463,17 +454,18 @@ void VL_MemToScreen_VGA (byte *source, int width, int height, int x, int y)
 {
 	_Far byte *vram;
 	_FP_SEG(vram) = 0x10c;
-
 	_FP_OFF(vram) = x + vbuf + (y << 10); // << 10 = * VRAMWIDTH
+
 	int width_2 = width >> 2;
 	int offset = VRAMWIDTH - width;
 	int y2 = 0;
+	int width_x_height = width_2 * height;
 
 	for(y = 0;y < height; y++)
 	{
 		for(x = 0;x < width;x++)
 		{
-			*vram++ = source[(y2 + (x >> 2)) + (x & 3) *  width_2 * height];
+			*vram++ = source[(y2 + (x >> 2)) + (x & 3) * width_x_height];
 		}
 		vram += offset;
 		y2 += width_2;

@@ -1530,7 +1530,7 @@ int CP_LoadGame(int quick)
 {
 		int handle,which,exit=0;
 		char name[13];
-
+		char filename[20] = "";
 
 		strcpy(name,SaveName);
 
@@ -1544,7 +1544,12 @@ int CP_LoadGame(int quick)
 				if (SaveGamesAvail[which])
 				{
 						name[7]=which+'0';
-						handle=open(name,O_BINARY);
+						if(MS_CheckParm("fdd"))
+						{
+							strcpy(filename,"a:\\");
+						}
+						strcat(filename,name);
+						handle=open(filename,O_BINARY);
 						lseek(handle,32,SEEK_SET);
 						loadedgame=true;
 						LoadTheGame(handle,0,0);
@@ -1580,7 +1585,12 @@ int CP_LoadGame(int quick)
 						SD_PlaySound(SHOOTSND);
 						name[7]=which+'0';
 
-						handle=open(name,O_BINARY);
+						if(MS_CheckParm("fdd"))
+						{
+							strcpy(filename,"a:\\");
+						}
+						strcat(filename,name);
+						handle=open(filename,O_BINARY);
 						lseek(handle,32,SEEK_SET);
 
 						DrawLSAction(0);
@@ -1696,8 +1706,8 @@ int CP_SaveGame(int quick)
 {
 		int handle,which,exit=0;
 		char name[13];
+		char filename[20] = "";
 		char input[32];
-
 
 		strcpy(name,SaveName);
 
@@ -1712,7 +1722,12 @@ int CP_SaveGame(int quick)
 				{
 						name[7]=which+'0';
 						unlink(name);
-						handle=creat(name,S_IREAD|S_IWRITE);
+						if(MS_CheckParm("fdd"))
+						{
+							strcpy(filename,"a:\\");
+						}
+						strcat(filename,name);
+						handle=creat(filename,S_IREAD|S_IWRITE);
 
 						strcpy(input,&SaveGameNames[which][0]);
 
@@ -1775,7 +1790,12 @@ int CP_SaveGame(int quick)
 								strcpy(&SaveGameNames[which][0],input);
 
 								unlink(name);
-								handle=creat(name,S_IREAD|S_IWRITE);
+								if(MS_CheckParm("fdd"))
+								{
+									strcpy(filename,"a:\\");
+								}
+								strcat(filename,name);
+								handle=creat(filename,S_IREAD|S_IWRITE);
 //                              _dos_write(handle,(void far *)input,32,&nwritten);
 								write(handle,input,32);
 								lseek(handle,32,SEEK_SET);
@@ -3190,7 +3210,7 @@ void SetupControlPanel(void)
 		long handle;
 		char name[13];
 		int which;
-
+		char filename[20] = "";
 
 		//
 		// CACHE GRAPHICS & SOUNDS
@@ -3217,12 +3237,19 @@ void SetupControlPanel(void)
 		//
 		// SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
 		//
+		if(MS_CheckParm("fdd"))
+		{
+			strcpy(filename,"a:\\");
+		}
+
 		strcpy(name,SaveName);
-		if (!_dos_findfirst(name,_A_NORMAL,&f))
+		strcat(filename,name);
+		if (!_dos_findfirst(filename,_A_NORMAL,&f))
 		{
 				long rc;
 				do
 				{
+					memset(filename, '\0', sizeof(filename));
 					which=f.name[7]-'0';
 					if (which<10)
 					{
@@ -3230,7 +3257,12 @@ void SetupControlPanel(void)
 						char temp[32];
 
 						SaveGamesAvail[which]=1;
-						handle=open(f.name,O_BINARY);
+						if(MS_CheckParm("fdd"))
+						{
+							strcpy(filename,"a:\\");
+						}
+						strcat(filename,f.name);
+						handle=open(filename,O_BINARY);
 						read(handle,temp,32);
 						close(handle);
 						strcpy(&SaveGameNames[which][0],temp);

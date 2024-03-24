@@ -163,93 +163,72 @@ int freq = 0;
 
 void ym3812_to_ym2612(int address, int data)
 {
-	if((address >= 0x20) && (address <= 0x35)) //multi
+	if((address >= 0x20) && (address <= 0x2d)) //multi
 	{
 		address -= 0x20;
-		if((address >= 0) && (address <= 2)) //ch1-3 op1
-		{
-			multi[0][address] = data;
-			SND_fm_write_data(0, YM2612Char + address, data & 0xf);
-		}
-		else  if((address >= 3) && (address <= 5)) //ch1-3 op2
-		{
-			multi[1][address - 3] = data;
-			//SND_fm_write_data(0, YM2612Char + 4 + (address - 3), data & 0xf);
-			SND_fm_write_data(0, YM2612Char + 8 + (address - 3), data & 0xf);
-			//SND_fm_write_data(0, YM2612Char + 12 + (address - 3), data & 0xf);
-		}
-		else if((address >= 8) && (address <= 10)) //ch4-6 op1
-		{
-			multi[0][address - 5] = data;
-			SND_fm_write_data(1, YM2612Char + (address - 8), data & 0xf);
-		}
-		else  if((address >= 11) && (address <= 13)) //ch4-6 op2
+		if(address >= 11) //ch4-6 op2
 		{
 			multi[1][address - 8] = data;
 			//SND_fm_write_data(1, YM2612Char + 4 + (address - 11), data & 0xf);
 			SND_fm_write_data(1, YM2612Char + 8 + (address - 11), data & 0xf);
 			//SND_fm_write_data(1, YM2612Char + 12 + (address - 11), data & 0xf);
 		}
+		else if(address >= 8) //ch4-6 op1
+		{
+			multi[0][address - 5] = data;
+			SND_fm_write_data(1, YM2612Char + (address - 8), data & 0xf);
+		}
+		else if(address == 6 || address == 7) //none
+		{
+		}
+		else if(address >= 3) //ch1-3 op2
+		{
+			multi[1][address - 3] = data;
+			//SND_fm_write_data(0, YM2612Char + 4 + (address - 3), data & 0xf);
+			SND_fm_write_data(0, YM2612Char + 8 + (address - 3), data & 0xf);
+			//SND_fm_write_data(0, YM2612Char + 12 + (address - 3), data & 0xf);
+		}
+		else //ch1-3 op1
+		{
+			multi[0][address] = data;
+			SND_fm_write_data(0, YM2612Char + address, data & 0xf);
+		}
 	}
-	else if((address >= 0x40) && (address <= 0x55)) //total level
+	else if((address >= 0x40) && (address <= 0x4d)) //total level
 	{
 		address -= 0x40;
-		if((address >= 0) && (address <= 2)) //ch1-3 op1
-		{
-			tl[0][address] = data;
-			SND_fm_write_data(0, YM2612Scale + address, data & 0x3f);
-		}
-		else  if((address >= 3) && (address <= 5)) //ch1-3 op2
-		{
-			tl[1][address - 3] = data;
-			//SND_fm_write_data(0, YM2612Scale + 4 + (address - 3), data & 0x3f);
-			SND_fm_write_data(0, YM2612Scale + 8 + (address - 3), data & 0x3f);
-			//SND_fm_write_data(0, YM2612Scale + 12 + (address - 3), data & 0x3f);
-		}
-		else if((address >= 8) && (address <= 10)) //ch4-6 op1
-		{
-			tl[0][address - 5] = data;
-			SND_fm_write_data(1, YM2612Scale + (address - 8), data & 0x3f);
-		}
-		else  if((address >= 11) && (address <= 13)) //ch4-6 op2
+		if(address >= 11) //ch4-6 op2
 		{
 			tl[1][address - 8] = data;
 			//SND_fm_write_data(1, YM2612Scale + 4 + (address - 11), data & 0x3f);
 			SND_fm_write_data(1, YM2612Scale + 8 + (address - 11), data & 0x3f);
 			//SND_fm_write_data(1, YM2612Scale + 12 + (address - 11), data & 0x3f);
 		}
+		else if(address >= 8) //ch4-6 op1
+		{
+			tl[0][address - 5] = data;
+			SND_fm_write_data(1, YM2612Scale + (address - 8), data & 0x3f);
+		}
+		else if(address == 6 || address == 7) //none
+		{
+		}
+		else if(address >= 3) //ch1-3 op2
+		{
+			tl[1][address - 3] = data;
+			//SND_fm_write_data(0, YM2612Scale + 4 + (address - 3), data & 0x3f);
+			SND_fm_write_data(0, YM2612Scale + 8 + (address - 3), data & 0x3f);
+			//SND_fm_write_data(0, YM2612Scale + 12 + (address - 3), data & 0x3f);
+		}
+		else //ch1-3 op1
+		{
+			tl[0][address] = data;
+			SND_fm_write_data(0, YM2612Scale + address, data & 0x3f);
+		}
 	}
-	else if((address >= 0x60) && (address <= 0x75)) //attack
+	else if((address >= 0x60) && (address <= 0x6d)) //attack
 	{
 		address -= 0x60;
-		if((address >= 0) && (address <= 2)) //ch1-3 op1
-		{
-			ar[0][address] =  data;
-			SND_fm_write_data(0, YM2612Attack + address, ((data >> 4) & 0xf) | ((multi[0][address] << 2) & 0x40));
-			SND_fm_write_data(0, YM2612Decay + address, (multi[0][address]  & 0x80) | (data & 0xf));
-			SND_fm_write_data(0, YM2612SR + address, (multi[0][address] >> 4) & 0x2);
-		}
-		else  if((address >= 3) && (address <= 5)) //ch1-3 op2
-		{
-			ar[1][address - 3] =  data;
-			//SND_fm_write_data(0, YM2612Attack + 4 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
-			//SND_fm_write_data(0, YM2612Decay + 4 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
-			//SND_fm_write_data(0, YM2612SR + 4 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
-			SND_fm_write_data(0, YM2612Attack + 8 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
-			SND_fm_write_data(0, YM2612Decay + 8 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
-			SND_fm_write_data(0, YM2612SR + 8 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
-			//SND_fm_write_data(0, YM2612Attack + 12 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
-			//SND_fm_write_data(0, YM2612Decay + 12 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
-			//SND_fm_write_data(0, YM2612SR + 12 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
-		}
-		else if((address >= 8) && (address <= 10)) //ch4-6 op1
-		{
-			ar[0][address - 5] =  data;
-			SND_fm_write_data(1, YM2612Attack + (address - 8), ((data >> 4) & 0xf) | ((multi[0][address - 5] << 2) & 0x40));
-			SND_fm_write_data(1, YM2612Decay + (address - 8), (multi[0][address - 5] & 0x80) | (data & 0xf));
-			SND_fm_write_data(1, YM2612SR + (address - 8), (multi[0][address - 5] >> 4) & 0x2);
-		}
-		else  if((address >= 11) && (address <= 13)) //ch4-6 op2
+		if(address >= 11) //ch4-6 op2
 		{
 			ar[1][address - 8] =  data;
 			//SND_fm_write_data(1, YM2612Attack + 4 + (address - 11), ((data >> 4) & 0xf) | ((multi[1][address - 8] << 2) & 0x40));
@@ -262,63 +241,96 @@ void ym3812_to_ym2612(int address, int data)
 			//SND_fm_write_data(1, YM2612Decay + 12 + (address - 11), (multi[1][address - 8] & 0x80) | (data & 0xf));
 			//SND_fm_write_data(1, YM2612SR + 12 + (address - 11), (multi[1][address - 8] >> 4) & 0x2);
 		}
+		else if(address >= 8) //ch4-6 op1
+		{
+			ar[0][address - 5] =  data;
+			SND_fm_write_data(1, YM2612Attack + (address - 8), ((data >> 4) & 0xf) | ((multi[0][address - 5] << 2) & 0x40));
+			SND_fm_write_data(1, YM2612Decay + (address - 8), (multi[0][address - 5] & 0x80) | (data & 0xf));
+			SND_fm_write_data(1, YM2612SR + (address - 8), (multi[0][address - 5] >> 4) & 0x2);
+		}
+		else if(address == 6 || address == 7) //none
+		{
+		}
+		else if(address >= 3) //ch1-3 op2
+		{
+			ar[1][address - 3] =  data;
+			//SND_fm_write_data(0, YM2612Attack + 4 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
+			//SND_fm_write_data(0, YM2612Decay + 4 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
+			//SND_fm_write_data(0, YM2612SR + 4 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
+			SND_fm_write_data(0, YM2612Attack + 8 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
+			SND_fm_write_data(0, YM2612Decay + 8 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
+			SND_fm_write_data(0, YM2612SR + 8 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
+			//SND_fm_write_data(0, YM2612Attack + 12 + (address - 3), ((data >> 4) & 0xf) | ((multi[1][address - 3] << 2) & 0x40));
+			//SND_fm_write_data(0, YM2612Decay + 12 + (address - 3), (multi[1][address - 3] & 0x80) | (data & 0xf));
+			//SND_fm_write_data(0, YM2612SR + 12 + (address - 3), (multi[1][address - 3] >> 4) & 0x2);
+		}
+		else //ch1-3 op1
+		{
+			ar[0][address] =  data;
+			SND_fm_write_data(0, YM2612Attack + address, ((data >> 4) & 0xf) | ((multi[0][address] << 2) & 0x40));
+			SND_fm_write_data(0, YM2612Decay + address, (multi[0][address]  & 0x80) | (data & 0xf));
+			SND_fm_write_data(0, YM2612SR + address, (multi[0][address] >> 4) & 0x2);
+		}
 	}
-	else if((address >= 0x80) && (address <= 0x95)) //sustain
+	else if((address >= 0x80) && (address <= 0x8d)) //sustain
 	{
 		address -= 0x80;
-		if((address >= 0) && (address <= 2)) //ch1-3 op1
-		{
-			SND_fm_write_data(0, YM2612Sus + address, data & 0xff);
-		}
-		else  if((address >= 3) && (address <= 5)) //ch1-3 op2
-		{
-			//SND_fm_write_data(0, YM2612Sus + 4 + (address - 3), data & 0xff);
-			SND_fm_write_data(0, YM2612Sus + 8 + (address - 3), data & 0xff);
-			//SND_fm_write_data(0, YM2612Sus + 12 + (address - 3), data & 0xff);
-		}
-		else if((address >= 8) && (address <= 10)) //ch4-6 op1
-		{
-			SND_fm_write_data(1, YM2612Sus + (address - 8), data & 0xff);
-		}
-		else  if((address >= 11) && (address <= 13)) //ch4-6 op2
+		if(address >= 11) //ch4-6 op2
 		{
 			//SND_fm_write_data(1, YM2612Sus + 4 + (address - 11), data & 0xff);
 			SND_fm_write_data(1, YM2612Sus + 8 + (address - 11), data & 0xff);
 			//SND_fm_write_data(1, YM2612Sus + 12 + (address - 11), data & 0xff);
 		}
+		else if(address >= 8) //ch4-6 op1
+		{
+			SND_fm_write_data(1, YM2612Sus + (address - 8), data & 0xff);
+		}
+		else if(address == 6 || address == 7) //none
+		{
+		}
+		else if(address >= 3) //ch1-3 op2
+		{
+			//SND_fm_write_data(0, YM2612Sus + 4 + (address - 3), data & 0xff);
+			SND_fm_write_data(0, YM2612Sus + 8 + (address - 3), data & 0xff);
+			//SND_fm_write_data(0, YM2612Sus + 12 + (address - 3), data & 0xff);
+		}
+		else //ch1-3 op1
+		{
+			SND_fm_write_data(0, YM2612Sus + address, data & 0xff);
+		}
 	}
 	else if((address >= 0xa0) && (address <= 0xa5)) //f-number
 	{
 		address -= 0xa0;
-		if((address >= 0) && (address <= 2)) //ch1-3
-		{
-			fnum[address] = data;
-			SND_fm_write_data(0, YM2612FreqH + address, (((fnum_hi[address] << 1) & 0x3f) | ((fnum[address] >> 7) & 0x1)) & 0xff);
-			SND_fm_write_data(0, YM2612FreqL + address, (fnum[address] << 1) & 0xff);
-		}
-		else if((address >= 3 && address <= 5)) //ch4-6
+		if(address >= 3) //ch4-6
 		{
 			fnum[address] = data;
 			SND_fm_write_data(1, YM2612FreqH + (address - 3), (((fnum_hi[address]  << 1) & 0x3f ) | ((fnum[address] >> 7) & 0x1)) & 0xff);
 			SND_fm_write_data(1, YM2612FreqL + (address - 3), (fnum[address] << 1) &0xff);
+		}
+		else //ch1-3
+		{
+			fnum[address] = data;
+			SND_fm_write_data(0, YM2612FreqH + address, (((fnum_hi[address] << 1) & 0x3f) | ((fnum[address] >> 7) & 0x1)) & 0xff);
+			SND_fm_write_data(0, YM2612FreqL + address, (fnum[address] << 1) & 0xff);
 		}
 
 	}
 	else if((address >= 0xb0) && (address <= 0xb5)) //block
 	{
 		address -= 0xb0;
-		if((address >= 0) && (address <= 2)) //ch1-3
-		{
-			fnum_hi[address] = data;
-			SND_fm_write_data(0, YM2612FreqH + address, (((fnum_hi[address] << 1) & 0x3f) | ((fnum[address] >> 7) & 0x1)) & 0xff);
-			SND_fm_write_data(0, YM2612FreqL + address, (fnum[address] << 1) & 0xff);
-		}
-		else if((address >= 3) && (address <= 5)) //ch4-6
+		if(address >= 3) //ch4-6
 		{
 			fnum_hi[address] = data;
 			SND_fm_write_data(1, YM2612FreqH + (address - 3), (((fnum_hi[address] << 1) & 0x3f) | ((fnum[address] >> 7) & 0x1)) & 0xff);
 			SND_fm_write_data(1, YM2612FreqL + (address - 3), (fnum[address] << 1) & 0xff);
 			address++;
+		}
+		else //ch1-3
+		{
+			fnum_hi[address] = data;
+			SND_fm_write_data(0, YM2612FreqH + address, (((fnum_hi[address] << 1) & 0x3f) | ((fnum[address] >> 7) & 0x1)) & 0xff);
+			SND_fm_write_data(0, YM2612FreqL + address, (fnum[address] << 1) & 0xff);
 		}
 
 		if(data & 32)
@@ -333,13 +345,13 @@ void ym3812_to_ym2612(int address, int data)
 	else if((address >= 0xc0) && (address <= 0xc5)) //feedback
 	{
 		address -= 0xc0;
-		if((address >= 0) && (address <= 2)) //ch1-3
-		{
-			SND_fm_write_data(0, YM2612FeedCon + address, ((data << 2) & 0x38) | 0x6 + (data & 0x1));
-		}
-		else if((address >= 3) && (address <= 5)) //ch4-6
+		if(address >= 3) //ch4-6
 		{
 			SND_fm_write_data(1, YM2612FeedCon + (address - 3), ((data << 2) & 0x38) | 0x6 + (data & 0x1));
+		}
+		else //ch1-3
+		{
+			SND_fm_write_data(0, YM2612FeedCon + address, ((data << 2) & 0x38) | 0x6 + (data & 0x1));
 		}
 	}
 }
@@ -401,25 +413,12 @@ byte set_wavedata(byte *data,longword len)
 
 	byte control = 0x80;
 
-	_outb( 0x4f7, 0x80 );
+	_outb( 0x4f7, control );
 
 	while(len)
 	{
-		/*if(*data == 0xff)
-		{
-			*waveram++ = 0xfe;
-			data++;
-		}
-		else if(*data < 0x80)
-		{
-			*waveram++ = 0x80 - *data++;
-		}
-		else
-		{
-			*waveram++ = *data++;
-		}*/
-
-		*waveram++ = uint8_to_int8_for_pcmwave[*data++];
+		//*waveram++ = uint8_to_int8_for_pcmwave[*data++];
+		*waveram++ = *data++;
 
 		if(_FP_OFF(waveram) == 4096)
 		{
@@ -454,28 +453,15 @@ void SDL_Cache_Gun_Sounds(void) // for SDL_PCMPlay_Gun
 	for (i = 4; i < 7; i++)
 	{
 		len = DigiList[(i * 2) + 1];
-		data = SDL_LoadDigiSegment(DigiList[(i * 2) + 0]);
+		data = (Pages+Pagetables[PMSoundStart+(DigiList[(i * 2) + 0])]);
 
 		_FP_OFF(waveram) = 0x0;
 		_outb(0x4f7, control);
 
 		while (len)
 		{
-			/*if (*data == 0xff)
-			{
-				*waveram++ = 0xfe;
-				data++;
-			}
-			else if (*data < 0x80)
-			{
-				*waveram++ = 0x80 - *data++;
-			}
-			else
-			{
-				*waveram++ = *data++;
-			}*/
-
-		*waveram++ = uint8_to_int8_for_pcmwave[*data++];
+		//*waveram++ = uint8_to_int8_for_pcmwave[*data++];
+		*waveram++ = *data++;
 
 		if (_FP_OFF(waveram) == 4096)
 		{
@@ -698,12 +684,15 @@ static void
 SDL_PCMPlaySample(byte *data,longword len,boolean inIRQ)
 {
 
-	SDL_PCMStopSample();
+	//SDL_PCMStopSample();
+
+	_outb(0x04f8, 0xfd);
 
 	set_wavedata(data, len);
 
 	_outb(0x04f7, 0xc0);
 	_outb(0x04f6, 0);
+	_outb(0x04f8, 0xfc);
 	_outb(0x04f7, 0x80);
 
 	PCMSamplePlaying = true;
@@ -717,6 +706,20 @@ SDL_PCMPlaySample(byte *data,longword len,boolean inIRQ)
 
 static void SDL_PCMPlay_Gun(soundnames sound)
 {
+	_Far byte *waveram;
+	_FP_SEG(waveram) = 0x140;
+	_FP_OFF(waveram) = 0x0;
+
+	_outb(0x04f8, 0xfe);
+
+	//Need wait(384 source clocks) for RF5C68 registers? i don't know.
+	_outb(0x4f7, 0x8f);
+	*waveram++ = 0x0;
+	for(int i = 0;i < 383;i++)
+	{
+		*waveram++ = 0xff;
+	}
+
 	_outb(0x04f7, 0xc1);
 
 	switch (sound)
@@ -733,6 +736,7 @@ static void SDL_PCMPlay_Gun(soundnames sound)
 			break;
 	}
 
+	_outb(0x04f8, 0xfc);
 	_outb(0x04f7, 0x80);
 }
 
@@ -748,12 +752,24 @@ SDL_StartPCM(void)
 	_Far char *waveram;
 	_FP_SEG(waveram) = 0x140;
 	_FP_OFF(waveram) = 0x0;
+	int i;
 
+	_FP_OFF(waveram) = 0x0;
+	_outb( 0x4f7, 0x0 );
+
+	*waveram++ = 0x0;
+
+	for(i = 0;i < 4095;i++)
+	{
+		*waveram++ = 0xff;
+	}
+
+	_FP_OFF(waveram) = 0x0;
 	_outb( 0x4f7, 0xf );
 
 	*waveram++ = 0x0;
 
-	for(int i = 0;i < 4095;i++)
+	for(i = 0;i < 4095;i++)
 	{
 		*waveram++ = 0xff;
 	}
@@ -955,10 +971,11 @@ SD_PlayDigitized(word which,int leftpos,int rightpos)
 		DigiPage = DigiList[(which * 2) + 0];
 		DigiLeft = DigiList[(which * 2) + 1];
 
-		lastdigistart=DigiPage;
+		//lastdigistart=DigiPage;
 
 		len = DigiLeft;
-		addr = SDL_LoadDigiSegment(DigiPage++);
+		addr = (Pages+Pagetables[PMSoundStart+DigiPage]);
+		DigiPage++;
 
 		DigiPlaying = true;
 		DigiLastSegment = false;
@@ -1021,26 +1038,20 @@ SDL_SetupDigi(void)
 {
 		memptr  list;
 		word    *p;
-		word pg;
+		byte	*pcmdata;
 		int             i;
 
-		list=malloc(PMPageSize);
-		p=(word *)(Pages+((ChunksInFile-1)<<12));
-		memcpy(list,p,PMPageSize);
-		
-		pg = PMSoundStart;
-		for (i = 0;i < PMPageSize / (sizeof(word) * 2);i++,p += 2)
+		DigiList=malloc(PMPageSize);
+		p=(word *)(Pages+Pagetables[ChunksInFile-1]);
+		memcpy(DigiList,p,PMPageSize);
+
+		pcmdata = (Pages+Pagetables[PMSoundStart]);
+		while(pcmdata < (Pages+Pagetables[ChunksInFile-1]))
 		{
-				if (pg >= ChunksInFile - 1)
-						break;
-				pg += (p[1] + (PMPageSize - 1)) / PMPageSize;
+			*pcmdata++ = uint8_to_int8_for_pcmwave[*pcmdata];
 		}
-		
-		DigiList=(word *) malloc(i*sizeof(word)*2);
-		memcpy(DigiList,list,i*sizeof(word)*2);
-		free(list);
-		
-		NumDigi = i;
+
+		NumDigi = 128; // Sound data num. need fix
 
 		for (i = 0;i < LASTSOUND;i++)
 				DigiMap[i] = -1;

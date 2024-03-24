@@ -23,6 +23,7 @@ word wallspot[SCRWIDTH+1];*/
 void PM_Startup(boolean (*update)(unsigned current,unsigned total))
 {
 		byte *offset;
+		byte buf[4096];
 		int Pageoffset;
 		int i;
 		unsigned	current,total;
@@ -48,8 +49,8 @@ void PM_Startup(boolean (*update)(unsigned current,unsigned total))
 
 		Pagetables=(int *) malloc(ChunksInFile*sizeof(int));
 
-		Pageoffset = 0;
-		for(i = 0;i < ChunksInFile;i++)
+		Pageoffset = (PMSpriteStart - 1) * 1024;
+		for(i = PMSpriteStart;i < ChunksInFile;i++)
 		{
 			Pageoffset += PageLengths[i];
 		}
@@ -68,9 +69,26 @@ void PM_Startup(boolean (*update)(unsigned current,unsigned total))
 		Pageoffset = 0;
 		for(i=0;i<ChunksInFile;i++)
 		{
-			fseek(file,PageOffsets[i],SEEK_SET);
-			offset = Pages+Pageoffset;
-			fread(offset,1,PageLengths[i],file);
+			if(i >= PMSpriteStart)
+			{
+				fseek(file,PageOffsets[i],SEEK_SET);
+				offset = Pages+Pageoffset;
+				fread(offset,1,PageLengths[i],file);
+			}
+			else
+			{
+				fseek(file,PageOffsets[i],SEEK_SET);
+				fread(buf,1,4096,file);
+				offset = Pages+Pageoffset;
+				PageLengths[i] = 1024;
+				for(int k = 0;k < 32;k++)
+				{
+					for(int j = 0;j < 32;j++)
+					{
+						*offset++ = buf[(j * 2) + (k * 128)];
+					}
+				}
+			}
 			Pagetables[i] = Pageoffset;
 			Pageoffset += PageLengths[i];
 			current++;
@@ -85,8 +103,8 @@ void PM_Startup(boolean (*update)(unsigned current,unsigned total))
 void PM_Shutdown()
 {
 	free(PageLengths);
-	free(Pages);
 	free(Pagetables);
+	free(Pages);
 }
 
 

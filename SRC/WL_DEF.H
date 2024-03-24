@@ -37,6 +37,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <timeb.h>
+#include <direct.h>
+
+#include "setdata.h"
 
 #include "FOREIGN.H"
         
@@ -865,6 +868,7 @@ extern int PMSoundStart;
 extern long *PageOffsets;
 extern word *PageLengths;
 extern byte *Pages;
+extern int *Pagetables;
 
 extern unsigned int vbuf;
 extern unsigned int vdisp;

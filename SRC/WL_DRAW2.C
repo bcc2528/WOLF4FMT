@@ -286,10 +286,10 @@ void ScalePost(void)
 	if(yoffs<0) yoffs=0;
 	yoffs+=postx;
 	yendoffs=viewheight/2+ywcount-1;
-	yw=63;
+	yw=31;
 	while(yendoffs>=viewheight)
 	{
-		ywcount-=32;
+		ywcount-=16;
 		while(ywcount<=0)
 		{
 			ywcount+=yd;
@@ -306,7 +306,7 @@ void ScalePost(void)
 	while(yoffs)
 	{
 		*vram=col;
-		ywcount-=32;
+		ywcount-=16;
 		if(ywcount<=0)
 		{
 			do
@@ -340,7 +340,7 @@ void ScalePost_Low(void)
 
 	ywcount = height >> 3;
 
-	fracstep = 16777216 / height;
+	fracstep = 8388608 / height;
 	yendoffs = (viewheight >> 1) + ywcount;
 	if(yendoffs >= viewheight)
 	{
@@ -382,10 +382,10 @@ void HitVertWall (void)
 		int wallpic;
 		int texture;
 
-		texture = ((yintercept+texdelta)>>4)&0xfc0;
+		texture = ((yintercept+texdelta)>>6)&0x3e0;
 		if (xtilestep == -1)
 		{
-				texture = 0xfc0-texture;
+				texture = 0x3e0-texture;
 				xintercept += TILEGLOBAL;
 		}
 
@@ -424,7 +424,7 @@ void HitVertWall (void)
 		else
 				wallpic = vertwall[tilehit];
 
-		postsource = Pages+(wallpic<<12)+texture;
+		postsource = Pages+(wallpic<<10)+texture;
 
 }
 
@@ -433,10 +433,10 @@ void HitVertWall_Low (void)
 		int wallpic;
 		int texture;
 
-		texture = ((yintercept+texdelta)>>4)&0xfc0;
+		texture = ((yintercept+texdelta)>>6)&0x3e0;
 		if (xtilestep == -1)
 		{
-				texture = 0xfc0-texture;
+				texture = 0x3e0-texture;
 				xintercept += TILEGLOBAL;
 		}
 
@@ -470,7 +470,7 @@ void HitVertWall_Low (void)
 		else
 				wallpic = vertwall[tilehit];
 
-		postsource = Pages+(wallpic<<12)+texture;
+		postsource = Pages+(wallpic<<10)+texture;
 
 }
 
@@ -491,11 +491,11 @@ void HitHorizWall (void)
 		int wallpic;
 		int texture;
 
-		texture = ((xintercept+texdelta)>>4)&0xfc0;
+		texture = ((xintercept+texdelta)>>6)&0x3e0;
 		if (ytilestep == -1)
 				yintercept += TILEGLOBAL;
 		else
-				texture = 0xfc0-texture;
+				texture = 0x3e0-texture;
 
 	if(lastside==0 && lastintercept==ytile && lasttilehit==tilehit && !(lasttilehit & 0x40))
 	{
@@ -532,7 +532,7 @@ void HitHorizWall (void)
 		else
 				wallpic = horizwall[tilehit];
 
-		postsource = Pages+(wallpic<<12)+texture;
+		postsource = Pages+(wallpic<<10)+texture;
 
 }
 
@@ -541,11 +541,11 @@ void HitHorizWall_Low (void)
 		int wallpic;
 		int texture;
 
-		texture = ((xintercept+texdelta)>>4)&0xfc0;
+		texture = ((xintercept+texdelta)>>6)&0x3e0;
 		if (ytilestep == -1)
 				yintercept += TILEGLOBAL;
 		else
-				texture = 0xfc0-texture;
+				texture = 0x3e0-texture;
 
 	if(lastside==0 && lastintercept==ytile && lasttilehit==tilehit && !(lasttilehit & 0x40))
 	{
@@ -577,7 +577,7 @@ void HitHorizWall_Low (void)
 		else
 				wallpic = horizwall[tilehit];
 
-		postsource = Pages+(wallpic<<12)+texture;
+		postsource = Pages+(wallpic<<10)+texture;
 
 }
 
@@ -599,7 +599,7 @@ void HitHorizDoor (void)
 		int texture;
 
 		doornum = tilehit&0x7f;
-		texture = ((xintercept-doorposition[doornum])>>4)&0xfc0;
+		texture = ((xintercept-doorposition[doornum])>>6)&0x3e0;
 
 	if(lasttilehit==tilehit)
 	{
@@ -640,7 +640,7 @@ void HitHorizDoor (void)
 						break;
 		}
 
-		postsource = Pages+(doorpage<<12)+texture;
+		postsource = Pages+(doorpage<<10)+texture;
 }
 
 void HitHorizDoor_Low (void)
@@ -650,7 +650,7 @@ void HitHorizDoor_Low (void)
 		int texture;
 
 		doornum = tilehit&0x7f;
-		texture = ((xintercept-doorposition[doornum])>>4)&0xfc0;
+		texture = ((xintercept-doorposition[doornum])>>6)&0x3e0;
 
 	if(lasttilehit==tilehit)
 	{
@@ -686,7 +686,7 @@ void HitHorizDoor_Low (void)
 						break;
 		}
 
-		postsource = Pages+(doorpage<<12)+texture;
+		postsource = Pages+(doorpage<<10)+texture;
 }
 
 
@@ -707,7 +707,7 @@ void HitVertDoor (void)
 		int texture;
 
 		doornum = tilehit&0x7f;
-		texture = ((yintercept-doorposition[doornum])>>4)&0xfc0;
+		texture = ((yintercept-doorposition[doornum])>>6)&0x3e0;
 
 	if(lasttilehit==tilehit)
 	{
@@ -748,7 +748,7 @@ void HitVertDoor (void)
 						break;
 		}
 
-		postsource = Pages+(doorpage<<12)+texture;
+		postsource = Pages+(doorpage<<10)+texture;
 }
 
 void HitVertDoor_Low (void)
@@ -758,7 +758,7 @@ void HitVertDoor_Low (void)
 		int texture;
 
 		doornum = tilehit&0x7f;
-		texture = ((yintercept-doorposition[doornum])>>4)&0xfc0;
+		texture = ((yintercept-doorposition[doornum])>>6)&0x3e0;
 
 	if(lasttilehit==tilehit)
 	{
@@ -794,7 +794,7 @@ void HitVertDoor_Low (void)
 						break;
 		}
 
-		postsource = Pages+(doorpage<<12)+texture;
+		postsource = Pages+(doorpage<<10)+texture;
 }
 
 

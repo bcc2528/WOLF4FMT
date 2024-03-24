@@ -2,7 +2,7 @@ g:\wolf4fmt\src\FIXEDMUL.OBJ
 g:\wolf4fmt\src\GAMEPAL3.OBJ
 g:\wolf4fmt\src\ID_CA.OBJ
 g:\wolf4fmt\src\ID_IN.OBJ
-g:\wolf4fmt\src\ID_PM.OBJ
+g:\wolf4fmt\src\ID_PM2.OBJ
 g:\wolf4fmt\src\ID_SD.OBJ
 g:\wolf4fmt\src\ID_US_1.OBJ
 g:\wolf4fmt\src\ID_VH.OBJ
@@ -12,7 +12,7 @@ g:\wolf4fmt\src\WL_ACT1.OBJ
 g:\wolf4fmt\src\WL_ACT2.OBJ
 g:\wolf4fmt\src\WL_AGENT.OBJ
 g:\wolf4fmt\src\WL_DEBUG.OBJ
-g:\wolf4fmt\src\WL_DRAW.OBJ
+g:\wolf4fmt\src\WL_DRAW2.OBJ
 g:\wolf4fmt\src\WL_GAME.OBJ
 g:\wolf4fmt\src\WL_INTER.OBJ
 g:\wolf4fmt\src\WL_MAIN.OBJ
@@ -29,6 +29,6 @@ g:\wolf4fmt\src\WL_TEXT.OBJ
 -twocase
 -stack 16384
 -80386
--exe wolf4fmt.exp
+-exe wolf2mb.exp
 
 
