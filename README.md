@@ -1,2 +1,2 @@
 # WOLF4FMT
-Wolfenstein 3d for Fujitsu FM TOWNS
+Wolfenstein 3d for Fujitsu FM TOWNS / Marty
