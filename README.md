@@ -3,7 +3,9 @@ Wolfenstein 3d for Fujitsu FM TOWNS / Marty
 
 
 使用方法：製品版「Wolfenstein 3D」のゲームフォルダ内にある.WL6(CONFIG.WL6除く)拡張子のファイルを「WOLF2MB.EXP」「WOLF4FMT.EXP」と同一ディレクトリにおいて「WOLF2MB.EXP」か「WOLF4FMT.EXP」を実行。
+
 「WOLF2MB.EXP」はメモリが少ない機種向けなので通常は「WOLF4FMT.EXP」で実行してください。
+
 
 
 ～～～～～～～～～～～～～現バージョンV1.1 L20での仕様～～～～～～～～～～～～～
@@ -15,6 +17,7 @@ Wolfenstein 3d for Fujitsu FM TOWNS / Marty
 ・フレームレートは上限60fps(オリジナルIBM-PC版は70fps)。
 
 ・YM3812用のデータを無理やりYM2612(FM TOWNSのFM音源)で鳴らしているためドラム音が鳴らない、鳴り方も変。
+
 
 
 ～～～～～～～～～～～～2MB機(マーティー含む)での起動方法～～～～～～～～～～～～
